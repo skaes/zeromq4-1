@@ -278,6 +278,11 @@ esac
 
 # Checks for libraries
 AC_CHECK_LIB([pthread], [pthread_create])
+AC_CHECK_FUNC([pthread_setname_np],
+              [AC_DEFINE([ZMQ_HAVE_PTHREAD_SETNAME_NP], [1], [Have pthread_set_name_np])],
+              [AC_CHECK_LIB(pthread, pthread_setname_np,
+                            [AC_DEFINE([ZMQ_HAVE_PTHREAD_SETNAME_NP], [1], [Have pthread_set_name_np])],
+                            [AC_DEFINE([ZMQ_HAVE_PTHREAD_SETNAME_NP], [0], [Have pthread_set_name_np])])])
 AC_CHECK_LIB([rt], [clock_gettime])
 
 #

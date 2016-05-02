@@ -91,6 +91,13 @@ extern "C"
         rc = pthread_sigmask (SIG_BLOCK, &signal_set, NULL);
         posix_assert (rc);
 #endif
+        //  Set thread name to support CPU usage analysis using ps/top/htop.
+        //  We ignore return codes as porgram functionality is not affected.
+#if defined ZMQ_HAVE_PTHREAD_SETNAME_NP && defined ZMQ_HAVE_LINUX
+        pthread_setname_np(pthread_self(), "libzmq");
+#elif defined ZMQ_HAVE_PTHREAD_SETNAME_NP && defined ZMQ_HAVE_OSX
+        pthread_setname_np("libzmq");
+#endif
 
         zmq::thread_t *self = (zmq::thread_t*) arg_;
         self->tfn (self->arg);
